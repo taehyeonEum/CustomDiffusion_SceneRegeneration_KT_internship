@@ -302,6 +302,7 @@ class CustomDiffusionDataset(Dataset):
 
             if with_prior_preservation:
                 class_data_root = Path(concept["class_data_dir"])
+                print("line 305, class_data_root: ", class_data_root)
                 if os.path.isdir(class_data_root):
                     class_images_path = list(class_data_root.iterdir())
                     class_prompt = [concept["class_prompt"] for _ in range(len(class_images_path))]
@@ -389,6 +390,23 @@ class CustomDiffusionDataset(Dataset):
 
         if self.with_prior_preservation:
             class_image, class_prompt = self.class_images_path[index % self.num_class_images]
+            #thum_code
+            # class_image = './real_reg/samples_cat/cat/1.jpg'
+            # print("class_image: ", class_image)
+            # print("class_image type", type(class_image))
+            # li = class_image.split("\\")
+            # print('li', li)
+            # class_image = '/'.join(li)
+            # # class_image = str(class_image)
+            # # print("class_prompt: ", class_prompt)
+            # # class_image.replace('\\', "/")
+            # print("class_image: ", class_image)
+
+            # import os
+            # print(os.getcwd())
+            # print('----------')
+            # import pdb
+            # pdb.set_trace()
             class_image = Image.open(class_image)
             if not class_image.mode == "RGB":
                 class_image = class_image.convert("RGB")

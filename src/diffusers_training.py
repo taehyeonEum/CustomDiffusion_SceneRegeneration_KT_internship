@@ -592,6 +592,8 @@ def get_full_repo_name(model_id: str, organization: Optional[str] = None, token:
 
 
 def main(args):
+    #thum_code
+    os.makedirs(args.output_dir, exist_ok=True)
     logging_dir = Path(args.output_dir, args.logging_dir)
     accelerator_project_config = ProjectConfiguration(project_dir=args.output_dir, logging_dir=logging_dir)
 
@@ -599,8 +601,9 @@ def main(args):
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         mixed_precision=args.mixed_precision,
         log_with=args.report_to,
-        logging_dir=logging_dir,
+        project_dir=logging_dir,
     )
+        #thum_code, logging_dir attribute was contained in Accelerator! 
 
     if args.report_to == "wandb":
         if not is_wandb_available():
@@ -792,6 +795,7 @@ def main(args):
 
     # Use 8-bit Adam for lower memory usage or to fine-tune the model in 16GB GPUs
     if args.use_8bit_adam:
+        print("-----using_8bit_adam")
         try:
             import bitsandbytes as bnb
         except ImportError:
@@ -801,6 +805,7 @@ def main(args):
 
         optimizer_class = bnb.optim.AdamW8bit
     else:
+        print("----not using 8bit adam")
         optimizer_class = torch.optim.AdamW
 
     # Adding a modifier token which is optimized ####

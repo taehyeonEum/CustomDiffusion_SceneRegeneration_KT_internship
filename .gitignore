@@ -1,0 +1,4 @@
+*.ckpt
+*.bin
+data.zip
+events.out*
