@@ -27,3 +27,7 @@ python src/get_deltas.py --path logs/<folder-name> --newtoken 1
 ## sample
 python sample.py --prompt "<new1> cat playing with a ball" --delta_ckpt logs/<folder-name>/checkpoints/delta_epoch\=000004.ckpt --ckpt <pretrained-model-path>
 
+현재 구성한 상태에서는 크게 도움이 안되는 것 같음 나중에 한 번에 environment 출력. 
+그냥 docker 환경에서만 동작하고 있음. 
+
+container = d_x_c_cont0115 임 ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ

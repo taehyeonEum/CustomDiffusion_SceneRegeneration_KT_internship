@@ -81,9 +81,10 @@ for i in images:
             img = f.read()
             h.write(img)
 
-    f1.write(f"a image of {keyword_mdf} \n")
-    f2.write(f"{image_directory}/{str(n)}.jpg \n")
-    f3.write(f"{imgUrl} \n")
+    f1.write(f"a image of {keyword_mdf}\n")
+    f2.write(f"{image_directory}/{str(n)}.jpg\n")
+    # 위에 문장에서 .jpg이후에 띄어쓰기가 있어서 FileNotFoundError가 발생했다. ㅠㅠ
+    f3.write(f"{imgUrl}\n")
 
     if n ==200:
         break

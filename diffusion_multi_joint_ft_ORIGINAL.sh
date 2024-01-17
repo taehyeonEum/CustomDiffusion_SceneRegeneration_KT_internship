@@ -1,4 +1,5 @@
-## launch training script (2 GPUs recommended, increase --max_train_steps to 1000 if 1 GPU)
+## launch training script 
+## (2 GPUs recommended, increase --max_train_steps to 1000 if 1 GPU)
 
 accelerate launch src/diffusers_training.py \
           --pretrained_model_name_or_path=$MODEL_NAME  \
@@ -15,4 +16,7 @@ accelerate launch src/diffusers_training.py \
           --modifier_token "<new1>+<new2>" 
 
 ## sample 
-python src/diffusers_sample.py --delta_ckpt logs/cat_wooden_pot/delta.bin --ckpt "CompVis/stable-diffusion-v1-4" --prompt "<new1> cat sitting inside a <new2> wooden pot and looking up"
+python src/diffusers_sample.py \
+    --delta_ckpt logs/cat_wooden_pot/delta.bin \
+    --ckpt "CompVis/stable-diffusion-v1-4" \
+    --prompt "<new1> cat sitting inside a <new2> wooden pot and looking up"
