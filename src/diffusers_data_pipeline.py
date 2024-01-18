@@ -221,6 +221,7 @@ from PIL import Image
 import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
+import pdb
 
 
 def preprocess(image, scale, resample):
@@ -253,6 +254,31 @@ def collate_fn(examples, with_prior_preservation):
         "mask": mask.unsqueeze(1)
     }
     return batch
+
+#thumchat_code
+def concatenate_and_resize_images(folder_path, output_path, output_name, target_size=(100, 100)):
+    # 지정된 폴더에서 이미지 파일 목록 가져오기
+    image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+
+    # 이미지 파일들을 읽어와서 리스트에 저장하고 크기를 조정
+    resized_images = [Image.open(os.path.join(folder_path, img)).resize(target_size, Image.BICUBIC) for img in image_files]
+
+    # 모든 이미지의 크기가 동일한지 확인
+    width, height = resized_images[0].size
+    if not all(img.size == (width, height) for img in resized_images):
+        raise ValueError("이미지 크기가 일치하지 않습니다.")
+
+    # 이미지들을 횡으로 나열하여 합치기
+    concatenated_image = Image.new('RGB', (len(resized_images) * width, height))
+    offset = 0
+    for img in resized_images:
+        concatenated_image.paste(img, (offset, 0))
+        offset += width
+
+    # 결과 이미지의 이름 지정하여 저장
+    result_path = os.path.join(output_path, output_name)
+    concatenated_image.save(result_path)
+    print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
 
 
 class PromptDataset(Dataset):
@@ -300,9 +326,11 @@ class CustomDiffusionDataset(Dataset):
             inst_img_path = [(x, concept["instance_prompt"]) for x in Path(concept["instance_data_dir"]).iterdir() if x.is_file()]
             self.instance_images_path.extend(inst_img_path)
 
+            concatenate_and_resize_images(concept["instance_data_dir"], concept["instance_data_dir"], "concatanated.jpg", (200, 200))
+            pdb.set_trace()
+            
             if with_prior_preservation:
                 class_data_root = Path(concept["class_data_dir"])
-                print("line 305, class_data_root: ", class_data_root)
                 if os.path.isdir(class_data_root):
                     class_images_path = list(class_data_root.iterdir())
                     class_prompt = [concept["class_prompt"] for _ in range(len(class_images_path))]
@@ -390,23 +418,6 @@ class CustomDiffusionDataset(Dataset):
 
         if self.with_prior_preservation:
             class_image, class_prompt = self.class_images_path[index % self.num_class_images]
-            #thum_code
-            # class_image = './real_reg/samples_cat/cat/1.jpg'
-            # print("class_image: ", class_image)
-            # print("class_image type", type(class_image))
-            # li = class_image.split("\\")
-            # print('li', li)
-            # class_image = '/'.join(li)
-            # # class_image = str(class_image)
-            # # print("class_prompt: ", class_prompt)
-            # # class_image.replace('\\', "/")
-            # print("class_image: ", class_image)
-
-            # import os
-            # print(os.getcwd())
-            # print('----------')
-            # import pdb
-            # pdb.set_trace()
             class_image = Image.open(class_image)
             if not class_image.mode == "RGB":
                 class_image = class_image.convert("RGB")

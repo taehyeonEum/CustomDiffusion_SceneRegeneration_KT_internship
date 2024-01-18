@@ -3,8 +3,8 @@
 
 accelerate launch src/diffusers_training.py \
           --pretrained_model_name_or_path=$MODEL_NAME  \
-          --output_dir=./logs/cat_wooden_pot_no_refs  \
-          --concepts_list=./assets/concept_list.json \
+          --output_dir=./logs/chris_pratt_gog_background_xxx  \
+          --concepts_list=./assets/concept_list_gog.json \
           --resolution=512  \
           --train_batch_size=2  \
           --learning_rate=1e-5  \
@@ -16,7 +16,7 @@ accelerate launch src/diffusers_training.py \
 
 ## sample 
 python src/diffusers_sample.py \
-    --delta_ckpt logs/cat_wooden_pot/delta.bin \
+    --delta_ckpt logs/chris_pratt_gog_background/delta.bin \
     --ckpt "CompVis/stable-diffusion-v1-4" \
-    --prompt "<new1> cat sitting inside a <new2> wooden pot and looking up" \
+    --from-file "prompts/gog_chris_pratt_background.txt" \
     --keyword "base_setting" \

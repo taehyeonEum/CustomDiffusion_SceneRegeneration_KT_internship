@@ -10,6 +10,7 @@ import os
 import numpy as np
 import torch
 from PIL import Image
+import pdb
 
 sys.path.append('./')
 from src.diffusers_model_pipeline import CustomDiffusionPipeline, CustomDiffusionXLPipeline
@@ -26,7 +27,7 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
     outdir = os.path.dirname(delta_ckpt) # output is folders directory! 
     #thum_code
     outdir = os.path.join(outdir, keyword)
-    os.makedirs(outdir)
+    os.makedirs(outdir, exist_ok=True)
 
     generator = torch.Generator(device='cuda').manual_seed(42)
     # 난수를 생성하는 객체, manual_seed는 난수를 생성할 때 시드를 지정할 수 있음 
@@ -50,7 +51,10 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
         for prompt in data:
             images = pipe(prompt, num_inference_steps=200, guidance_scale=6., eta=1., generator=generator).images
             all_images += images
-            images = np.hstack([np.array(x) for x in images], 0)
+            ## -----
+            pdb.set_trace()
+            # images = np.hstack(([np.array(x) for x in images], 0))
+            images = np.hstack([np.array(x) for x in images])
             images = Image.fromarray(images)
             # takes only first 50 characters of prompt to name the image file
             name = '-'.join(prompt[0][:50].split())
