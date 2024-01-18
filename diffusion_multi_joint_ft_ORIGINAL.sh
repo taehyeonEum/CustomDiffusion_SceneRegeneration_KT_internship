@@ -1,5 +1,7 @@
 ## launch training script 
 ## (2 GPUs recommended, increase --max_train_steps to 1000 if 1 GPU)
+export MODEL_NAME="CompVis/stable-diffusion-v1-4"
+
 
 accelerate launch src/diffusers_training.py \
           --pretrained_model_name_or_path=$MODEL_NAME  \

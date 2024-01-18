@@ -210,7 +210,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
+import pdb
 import sys
 import argparse
 import hashlib
@@ -648,9 +648,9 @@ def main(args):
             if not class_images_dir.exists():
                 class_images_dir.mkdir(parents=True, exist_ok=True)
             if args.real_prior:
-                if accelerator.is_main_process:
-                    if not Path(os.path.join(class_images_dir, 'images')).exists() or len(list(Path(os.path.join(class_images_dir, 'images')).iterdir())) < args.num_class_images:
-                        retrieve.retrieve(concept['class_prompt'], class_images_dir, args.num_class_images)
+                # if accelerator.is_main_process:
+                #     if not Path(os.path.join(class_images_dir, 'images')).exists() or len(list(Path(os.path.join(class_images_dir, 'images')).iterdir())) < args.num_class_images:
+                #         retrieve.retrieve(concept['class_prompt'], class_images_dir, args.num_class_images)
                 concept['class_prompt'] = os.path.join(class_images_dir, 'caption.txt')
                 concept['class_data_dir'] = os.path.join(class_images_dir, 'images.txt')
                 args.concepts_list[i] = concept

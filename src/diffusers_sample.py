@@ -52,7 +52,7 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
             images = pipe(prompt, num_inference_steps=200, guidance_scale=6., eta=1., generator=generator).images
             all_images += images
             ## -----
-            pdb.set_trace()
+            # pdb.set_trace()
             # images = np.hstack(([np.array(x) for x in images], 0))
             images = np.hstack([np.array(x) for x in images])
             images = Image.fromarray(images)

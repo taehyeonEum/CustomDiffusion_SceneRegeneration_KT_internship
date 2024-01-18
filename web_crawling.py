@@ -36,7 +36,7 @@ keyword = input('검색할 태그를 입력하세요 : ')
 keyword_mdf = keyword.replace(" ", "_")
 directory = f"./real_reg/samples_{keyword_mdf}"
 # "./real_reg/samples_cat"
-image_directory = os.path.join(directory, keyword_mdf)
+image_directory = directory + "/" + keyword_mdf
 # "./real_reg/samples_cat/cat"
 
 os.makedirs(image_directory, exist_ok=True)

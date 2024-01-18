@@ -256,12 +256,19 @@ def collate_fn(examples, with_prior_preservation):
     return batch
 
 #thumchat_code
+
 def concatenate_and_resize_images(folder_path, output_path, output_name, target_size=(100, 100)):
     # 지정된 폴더에서 이미지 파일 목록 가져오기
     image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+    # pdb.set_trace()
+
+    if 'concatenated.jpg' in image_files:
+        image_files.remove('concatenated.jpg')
 
     # 이미지 파일들을 읽어와서 리스트에 저장하고 크기를 조정
     resized_images = [Image.open(os.path.join(folder_path, img)).resize(target_size, Image.BICUBIC) for img in image_files]
+    if len(resized_images) > 7:
+        resized_images = resized_images[:7]
 
     # 모든 이미지의 크기가 동일한지 확인
     width, height = resized_images[0].size
@@ -279,7 +286,6 @@ def concatenate_and_resize_images(folder_path, output_path, output_name, target_
     result_path = os.path.join(output_path, output_name)
     concatenated_image.save(result_path)
     print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
-
 
 class PromptDataset(Dataset):
     "A simple dataset to prepare the prompts to generate class images on multiple GPUs."
@@ -326,11 +332,16 @@ class CustomDiffusionDataset(Dataset):
             inst_img_path = [(x, concept["instance_prompt"]) for x in Path(concept["instance_data_dir"]).iterdir() if x.is_file()]
             self.instance_images_path.extend(inst_img_path)
 
-            concatenate_and_resize_images(concept["instance_data_dir"], concept["instance_data_dir"], "concatanated.jpg", (200, 200))
-            pdb.set_trace()
+            concatenate_and_resize_images(concept["instance_data_dir"], concept["instance_data_dir"], "concatenated.jpg", (200, 200))
             
             if with_prior_preservation:
                 class_data_root = Path(concept["class_data_dir"])
+                name = "_".join("_".join((os.path.dirname(concept['class_data_dir'])).split("/")[1:]).split("_")[1:])
+                dirname = os.path.dirname(concept["class_data_dir"]) # 'real_reg/samples_galaxy'
+                dir_name = os.path.join(dirname, name)
+                # pdb.set_trace()
+                concatenate_and_resize_images(dir_name, dirname, "concatenated.jpg", (200, 200))
+                # pdb.set_trace()
                 if os.path.isdir(class_data_root):
                     class_images_path = list(class_data_root.iterdir())
                     class_prompt = [concept["class_prompt"] for _ in range(len(class_images_path))]

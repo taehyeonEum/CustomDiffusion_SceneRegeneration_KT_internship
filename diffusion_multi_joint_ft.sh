@@ -1,10 +1,18 @@
 ## launch training script 
 ## (2 GPUs recommended, increase --max_train_steps to 1000 if 1 GPU)
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+OUTPUT_DIR="./logs/chris_pratt_gog_background2"
+CONCEPT_LIST="./assets/concept_list_gog2.json"
+DELTA_CKPT="logs/chris_pratt_gog_background2/delta.bin"
+FROM_FILE="prompts/gog_chris_pratt_background.txt"
+KEYWORD="base_setting"
+
 
 accelerate launch src/diffusers_training.py \
-          --pretrained_model_name_or_path=$MODEL_NAME  \
-          --output_dir=./logs/chris_pratt_gog_background_xxx  \
-          --concepts_list=./assets/concept_list_gog.json \
+          --pretrained_model_name_or_path $MODEL_NAME  \
+          --output_dir ${OUTPUT_DIR}  \
+          --concepts_list ${CONCEPT_LIST} \
+          --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
           --resolution=512  \
           --train_batch_size=2  \
           --learning_rate=1e-5  \
@@ -16,7 +24,7 @@ accelerate launch src/diffusers_training.py \
 
 ## sample 
 python src/diffusers_sample.py \
-    --delta_ckpt logs/chris_pratt_gog_background/delta.bin \
-    --ckpt "CompVis/stable-diffusion-v1-4" \
-    --from-file "prompts/gog_chris_pratt_background.txt" \
-    --keyword "base_setting" \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
