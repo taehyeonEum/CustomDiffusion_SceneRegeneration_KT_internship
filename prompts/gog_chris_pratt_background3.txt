@@ -1,0 +1,10 @@
+A <new1> man is dancing in the <new2> style.
+A <new1> man is eating soup in the <new2> style.
+A <new1> man is playing with a racoon in the <new2> style.
+A <new1> man is playing soccer in the <new2> style.
+A <new1> man is smoking a cigarette in the <new2> style.
+A <new1> man is riding a bicycle in the <new2> style.
+A <new1> man is meeting his mother in the <new2> style.
+A <new1> man rules as a king in the <new2> style.
+A <new1> man is eating ramen in the <new2> style.
+A <new1> man is using a Mac in the <new2> style.  

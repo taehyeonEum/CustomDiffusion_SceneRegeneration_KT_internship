@@ -1,0 +1,14 @@
+[
+    {
+        "instance_prompt":     "photo of a <new1> man",
+        "class_prompt":         "man",
+        "instance_data_dir":    "./data/starload/im",
+        "class_data_dir":       "./real_reg/samples_man"
+    },
+    {
+        "instance_prompt":     "image of a <new2> style",
+        "class_prompt":         "style",
+        "instance_data_dir":    "./data/gog_background/im",
+        "class_data_dir":       "./real_reg/samples_background"
+    }
+]

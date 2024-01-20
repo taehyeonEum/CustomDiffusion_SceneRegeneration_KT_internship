@@ -1,10 +1,10 @@
 ## launch training script 
 ## (2 GPUs recommended, increase --max_train_steps to 1000 if 1 GPU)
 MODEL_NAME="CompVis/stable-diffusion-v1-4"
-OUTPUT_DIR="./logs/chris_pratt_gog_background2"
-CONCEPT_LIST="./assets/concept_list_gog2.json"
-DELTA_CKPT="logs/chris_pratt_gog_background2/delta.bin"
-FROM_FILE="prompts/gog_chris_pratt_background.txt"
+OUTPUT_DIR="./logs/chris_pratt_gog_background3"
+CONCEPT_LIST="./assets/concept_list_gog3.json"
+DELTA_CKPT="logs/chris_pratt_gog_background3/delta.bin"
+FROM_FILE="prompts/gog_chris_pratt_background3.txt"
 KEYWORD="base_setting"
 
 
