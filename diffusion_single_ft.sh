@@ -1,17 +1,17 @@
 ## launch training script (2 GPUs recommended, increase --max_train_steps to 500 if 1 GPU)
 MODEL_NAME="CompVis/stable-diffusion-v1-4"
-OUTPUT_DIR="./logs/jjanggu2"
-DELTA_CKPT="./logs/jjanggu2/delta.bin"
+OUTPUT_DIR="./logs/jjanggu3"
+DELTA_CKPT="./logs/jjanggu3/delta.bin"
 FROM_FILE="./prompts/jjanggu.txt"
 KEYWORD="base_setting"
 
 accelerate launch src/diffusers_training.py \
           --pretrained_model_name_or_path=$MODEL_NAME  \
           --instance_data_dir=./data/jjanggu/im  \
-          --class_data_dir=./real_reg/samples_japanese_cartoon_boy/ \
+          --class_data_dir=./real_reg/samples_boy_cartoon_character \
           --output_dir ${OUTPUT_DIR}  \
           --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
-          --instance_prompt="image of a <new1> boy"  \
+          --instance_prompt="cartoon of a <new1> boy character"  \
           --class_prompt="boy" \
           --resolution=512  \
           --train_batch_size=2  \
