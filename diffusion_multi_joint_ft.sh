@@ -2,7 +2,7 @@ MODEL_NAME="CompVis/stable-diffusion-v1-4"
 OUTPUT_DIR="./logs/chris_pratt_gog_background1_2"
 CONCEPT_LIST="./assets/concept_list_gog.json"
 DELTA_CKPT="logs/chris_pratt_gog_background1_2/delta.bin"
-FROM_FILE="prompts/jjanggu.txt"
+FROM_FILE="prompts/gog_chris_pratt_background3.txt"
 KEYWORD="base_setting"
 
 
