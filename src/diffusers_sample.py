@@ -15,6 +15,8 @@ import pdb
 sys.path.append('./')
 from src.diffusers_model_pipeline import CustomDiffusionPipeline, CustomDiffusionXLPipeline
 
+# def dummy(images, **kwargs):
+#     return images, []
 
 def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_model, keyword, sdxl=False):
     model_id = ckpt
@@ -23,6 +25,7 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
     else:
         pipe = CustomDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
     pipe.load_model(delta_ckpt, compress) # load_model is for loading modified kv_attention model.!! 
+    pipe.safety_checker = lambda images, **kwargs: (images, [False] * len(images))
 
     outdir = os.path.dirname(delta_ckpt) # output is folders directory! 
     #thum_code

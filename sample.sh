@@ -1,8 +1,8 @@
 MODEL_NAME="CompVis/stable-diffusion-v1-4"
-OUTPUT_DIR="./logs/chris_pratt_gog_background1_2"
-CONCEPT_LIST="./assets/concept_list_gog.json"
-DELTA_CKPT="logs/chris_pratt_gog_background1_2/delta.bin"
-FROM_FILE="prompts/gog_chris_pratt_background3.txt"
+OUTPUT_DIR="./logs/jjanggu_and_scene12"
+CONCEPT_LIST="./assets/concept_list_jjanggu_scene2.json"
+DELTA_CKPT="logs/jjanggu_and_scene12/delta.bin"
+FROM_FILE="prompts/jjanggu.txt"
 KEYWORD="base_setting"
 
 
@@ -15,7 +15,7 @@ KEYWORD="base_setting"
 #           --train_batch_size=2  \
 #           --learning_rate=1e-5  \
 #           --lr_warmup_steps=0 \
-#           --max_train_steps=1000 \
+#           --max_train_steps=1500 \
 #           --num_class_images=200 \
 #           --scale_lr --hflip  \
 #           --modifier_token "<new1>+<new2>" 
@@ -24,5 +24,5 @@ KEYWORD="base_setting"
 python src/diffusers_sample.py \
     --delta_ckpt ${DELTA_CKPT} \
     --ckpt ${MODEL_NAME} \
-    --from-file ${FROM_FILE} \
+    --prompt "A <new1> boy eats tangerines." \
     --keyword ${KEYWORD} \

@@ -219,8 +219,8 @@ from diffusers.models import AutoencoderKL, UNet2DConditionModel
 from diffusers.schedulers.scheduling_utils import SchedulerMixin
 from diffusers.schedulers import KarrasDiffusionSchedulers
 from diffusers.pipelines.stable_diffusion import StableDiffusionPipeline
-from diffusers.pipelines.stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
+from diffusers.pipelines.stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.models.attention import Attention
 from diffusers.utils.import_utils import is_xformers_available
 
@@ -231,6 +231,7 @@ else:
     xformers = None
 
 logger = get_logger(__name__)
+import sys
 
 
 def set_use_memory_efficient_attention_xformers(
@@ -392,8 +393,10 @@ class CustomDiffusionPipeline(StableDiffusionPipeline):
         modifier_token: list of new modifier tokens added or to be added to text_encoder
         modifier_token_id: list of id of new modifier tokens added or to be added to text_encoder
     """
-    _optional_components = ["safety_checker", "feature_extractor", "modifier_token"]
+    # _optional_components = ["safety_checker", "feature_extractor", "modifier_token"]
+    _optional_components = ["feature_extractor", "modifier_token"]
 
+    # thum_code: safety_checker : false  / original : True
     def __init__(
         self,
         vae: AutoencoderKL,
@@ -403,7 +406,7 @@ class CustomDiffusionPipeline(StableDiffusionPipeline):
         scheduler: SchedulerMixin,
         safety_checker: StableDiffusionSafetyChecker,
         feature_extractor: CLIPFeatureExtractor,
-        requires_safety_checker: bool = True,
+        requires_safety_checker: bool = False,
         modifier_token: list = [],
         modifier_token_id: list = [],
     ):
