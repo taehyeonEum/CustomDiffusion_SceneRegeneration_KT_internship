@@ -330,9 +330,9 @@ class CustomDiffusionDataset(Dataset):
         self.with_prior_preservation = with_prior_preservation
         for concept in concepts_list:
             inst_img_path = [(x, concept["instance_prompt"]) for x in Path(concept["instance_data_dir"]).iterdir() if x.is_file()]
-            self.instance_images_path.extend(inst_img_path)
 
-            pdb.set_trace()
+            # pdb.set_trace()
+            self.instance_images_path.extend(inst_img_path)
             concatenate_and_resize_images(concept["instance_data_dir"], os.path.dirname(concept["instance_data_dir"]), "concatenated.jpg", (200, 200))
             
             if with_prior_preservation:

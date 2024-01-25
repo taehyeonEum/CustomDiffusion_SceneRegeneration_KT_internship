@@ -250,7 +250,10 @@ check_min_version("0.21.4")
 
 logger = get_logger(__name__)
 
+'''
+아래 함수는 말 그대로 custom diffusion 을 만드는 함수 인데 아래 코드를 보면
 
+'''
 def create_custom_diffusion(unet, freeze_model):
     for name, params in unet.named_parameters():
         if freeze_model == 'crossattn':
@@ -946,6 +949,8 @@ def main(args):
     progress_bar.set_description("Steps")
     global_step = 0
 
+    # 실제 학습 부분!
+    # 내일 한 번 더 보기! 
     for epoch in range(args.num_train_epochs):
         unet.train()
         if args.train_text_encoder or args.modifier_token is not None:

@@ -18,7 +18,7 @@ from src.diffusers_model_pipeline import CustomDiffusionPipeline, CustomDiffusio
 # def dummy(images, **kwargs):
 #     return images, []
 
-def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_model, keyword, sdxl=False):
+def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_model, keyword, output_dir, sdxl=False):
     model_id = ckpt
     if sdxl:
         pipe = CustomDiffusionXLPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
@@ -27,9 +27,9 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
     pipe.load_model(delta_ckpt, compress) # load_model is for loading modified kv_attention model.!! 
     pipe.safety_checker = lambda images, **kwargs: (images, [False] * len(images))
 
-    outdir = os.path.dirname(delta_ckpt) # output is folders directory! 
+    # outdir = os.path.dirname(delta_ckpt) # output is folders directory! 
     #thum_code
-    outdir = os.path.join(outdir, keyword)
+    outdir = os.path.join(output_dir, keyword)
     os.makedirs(outdir, exist_ok=True)
 
     generator = torch.Generator(device='cuda').manual_seed(42)
@@ -86,10 +86,11 @@ def parse_args():
     #thum_code
     parser.add_argument("--keyword", help='for logging details of each experiment', 
                         default='basic_setting') 
+    parser.add_argument("--output_dir", default= "output", type=str)
 
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    sample(args.ckpt, args.delta_ckpt, args.from_file, args.prompt, args.compress, args.batch_size, args.freeze_model, args.keyword, args.sdxl )
+    sample(args.ckpt, args.delta_ckpt, args.from_file, args.prompt, args.compress, args.batch_size, args.freeze_model, args.keyword, args.output_dir, args.sdxl )
