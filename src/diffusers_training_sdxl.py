@@ -798,7 +798,8 @@ def main(args):
                 concept['class_data_dir'] = os.path.join(class_images_dir, 'images.txt')
                 args.concepts_list[i] = concept
                 accelerator.wait_for_everyone()
-            else:
+            # data를 생성하는 코드.. real_reg를 쓰는 나에게는 크게 필요하지 않은 ..
+            else: 
                 cur_class_images = len(list(class_images_dir.iterdir()))
 
                 if cur_class_images < args.num_class_images:
@@ -840,7 +841,7 @@ def main(args):
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
 
-    # Handle the repository creation
+    # Handle the repository creation 나한테는 아직 필요하지 않은 코드..!
     if accelerator.is_main_process:
         if args.output_dir is not None:
             os.makedirs(args.output_dir, exist_ok=True)
@@ -850,6 +851,7 @@ def main(args):
                 repo_id=args.hub_model_id or Path(args.output_dir).name, exist_ok=True, token=args.hub_token
             ).repo_id
 
+    # pre-train model or path 자리에는 StableDiffusion v1-4가 들어간다! 
     # Load the tokenizers
     tokenizer_one = AutoTokenizer.from_pretrained(
         args.pretrained_model_name_or_path, subfolder="tokenizer", revision=args.revision, use_fast=False
@@ -886,10 +888,12 @@ def main(args):
         args.pretrained_model_name_or_path, subfolder="unet", revision=args.revision
     )
 
+    #vae는 훈련을 안하느 false..
     vae.requires_grad_(False)
     if not args.train_text_encoder and args.modifier_token is None:
         text_encoder_one.requires_grad_(False)
         text_encoder_two.requires_grad_(False)
+    #unet은 위에 코드에서 미리 정의한대로 원하는 곳만 freeze하지 않고서 생성함... 왜냐하면 unet 구조 안에 중요한 attention 이 있기 때문.
     unet = create_custom_diffusion(unet, args.freeze_model)
 
     weight_dtype = torch.float32

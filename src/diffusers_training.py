@@ -250,7 +250,46 @@ check_min_version("0.21.4")
 
 logger = get_logger(__name__)
 
-
+# 아래 함수는 말 그대로 custom diffusion을 만드는 함수. 
+# freeze할 parameter과 freeze 하지 않을 parameter를 구분한다. -> 결국 이것이 fine-tuning 할 함수를 만드는 것과 동일한 행위가 된다. 
+# freeze_model이라는 변수가 'crossattn' 이면, attn2가 붙은 모든 parameter를 제외하고 나머지를 모두 freeze 한다. 
+# freeze_model이라는 변수가 'crossattn_kt'라면, key, value를 만드는 모든 weight 값들을 제외한 모든 weight값을 freeze 한다. 
+# 아래와 같이 attn이 구성되어 있는 것을 볼 수 있다.  모든 unet layer에서 cross attention이 이뤄진다고 생각할 수 있다. 
+# 결국 unet 내부의 parameter만 튜닝하는 것으로 해석하면 되는 것 같다! 
+'''
+down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_k.weight
+down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_v.weight
+down_blocks.0.attentions.1.transformer_blocks.0.attn2.to_k.weight
+down_blocks.0.attentions.1.transformer_blocks.0.attn2.to_v.weight
+down_blocks.1.attentions.0.transformer_blocks.0.attn2.to_k.weight
+down_blocks.1.attentions.0.transformer_blocks.0.attn2.to_v.weight
+down_blocks.1.attentions.1.transformer_blocks.0.attn2.to_k.weight
+down_blocks.1.attentions.1.transformer_blocks.0.attn2.to_v.weight
+down_blocks.2.attentions.0.transformer_blocks.0.attn2.to_k.weight
+down_blocks.2.attentions.0.transformer_blocks.0.attn2.to_v.weight
+down_blocks.2.attentions.1.transformer_blocks.0.attn2.to_k.weight
+down_blocks.2.attentions.1.transformer_blocks.0.attn2.to_v.weight
+up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_k.weight
+up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_v.weight
+up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_k.weight
+up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_v.weight
+up_blocks.1.attentions.2.transformer_blocks.0.attn2.to_k.weight
+up_blocks.1.attentions.2.transformer_blocks.0.attn2.to_v.weight
+up_blocks.2.attentions.0.transformer_blocks.0.attn2.to_k.weight
+up_blocks.2.attentions.0.transformer_blocks.0.attn2.to_v.weight
+up_blocks.2.attentions.1.transformer_blocks.0.attn2.to_k.weight
+up_blocks.2.attentions.1.transformer_blocks.0.attn2.to_v.weight
+up_blocks.2.attentions.2.transformer_blocks.0.attn2.to_k.weight
+up_blocks.2.attentions.2.transformer_blocks.0.attn2.to_v.weight
+up_blocks.3.attentions.0.transformer_blocks.0.attn2.to_k.weight
+up_blocks.3.attentions.0.transformer_blocks.0.attn2.to_v.weight
+up_blocks.3.attentions.1.transformer_blocks.0.attn2.to_k.weight
+up_blocks.3.attentions.1.transformer_blocks.0.attn2.to_v.weight
+up_blocks.3.attentions.2.transformer_blocks.0.attn2.to_k.weight
+up_blocks.3.attentions.2.transformer_blocks.0.attn2.to_v.weight
+mid_block.attentions.0.transformer_blocks.0.attn2.to_k.weight
+mid_block.attentions.0.transformer_blocks.0.attn2.to_v.weight
+'''
 def create_custom_diffusion(unet, freeze_model):
     for name, params in unet.named_parameters():
         if freeze_model == 'crossattn':
@@ -288,7 +327,7 @@ def freeze_params(params):
     for param in params:
         param.requires_grad = False
 
-
+# clip text encoder를 불러오는 함수인 것 같다.!!
 def import_model_class_from_model_name_or_path(pretrained_model_name_or_path: str, revision: str):
     text_encoder_config = PretrainedConfig.from_pretrained(
         pretrained_model_name_or_path,
@@ -580,7 +619,7 @@ def parse_args(input_args=None):
 
     return args
 
-
+# 허깅페이스 모델 불러올 때 사용하는 모델 같음. 
 def get_full_repo_name(model_id: str, organization: Optional[str] = None, token: Optional[str] = None):
     if token is None:
         token = HfFolder.get_token()
@@ -639,16 +678,18 @@ def main(args):
             }
         ]
     else:
+        # with 문으로 거의 파일을 열고 닫는 것 같음. 
         with open(args.concepts_list, "r") as f:
             args.concepts_list = json.load(f)
 
-    #thum_anno 아래 if문은 regularization을 하느냐에 대한 코드
+    #thum_anno 아래 if문은 regularization을 하는 세팅을 만드는 코드, 본격적인 훈련을 하기 전에 기본적인 정보들을 변수에 저장.
     if args.with_prior_preservation:
         for i, concept in enumerate(args.concepts_list):
             class_images_dir = Path(concept['class_data_dir'])
             if not class_images_dir.exists():
                 class_images_dir.mkdir(parents=True, exist_ok=True)
             if args.real_prior:
+                # thum_code
                 # if accelerator.is_main_process:
                 #     if not Path(os.path.join(class_images_dir, 'images')).exists() or len(list(Path(os.path.join(class_images_dir, 'images')).iterdir())) < args.num_class_images:
                 #         retrieve.retrieve(concept['class_prompt'], class_images_dir, args.num_class_images)
@@ -698,7 +739,7 @@ def main(args):
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
 
-    # Handle the repository creation
+    # Handle the repository creation 여튼 허깅페이스 관련된 코드..!
     if accelerator.is_main_process:
         if args.push_to_hub:
             if args.hub_model_id is None:
@@ -717,7 +758,7 @@ def main(args):
         elif args.output_dir is not None:
             os.makedirs(args.output_dir, exist_ok=True)
 
-    # Load the tokenizer
+    # Load the tokenizer 토크나이저를 load함 clip 아니면 swin transformer..
     if args.tokenizer_name:
         tokenizer = AutoTokenizer.from_pretrained(
             args.tokenizer_name,
@@ -735,7 +776,7 @@ def main(args):
     # import correct text encoder class
     text_encoder_cls = import_model_class_from_model_name_or_path(args.pretrained_model_name_or_path, args.revision)
 
-    # Load scheduler and models
+    # Load scheduler and models 
     noise_scheduler = DDPMScheduler.from_pretrained(args.pretrained_model_name_or_path, subfolder="scheduler")
     text_encoder = text_encoder_cls.from_pretrained(
         args.pretrained_model_name_or_path, subfolder="text_encoder", revision=args.revision
@@ -745,10 +786,11 @@ def main(args):
         args.pretrained_model_name_or_path, subfolder="unet", revision=args.revision
     )
 
-    vae.requires_grad_(False)
+    vae.requires_grad_(False) # vae는 튜닝을 안하는 것이 전반적인 추세인 것 같다. 
     if not args.train_text_encoder and args.modifier_token is None:
         text_encoder.requires_grad_(False)
-    unet = create_custom_diffusion(unet, args.freeze_model)
+    # 나의 경우에는 modifier_token이 항상 있기 때문에 text encoder를 튜닝한다고 생각하면 될 것 같다. 
+    unet = create_custom_diffusion(unet, args.freeze_model) 
 
     # For mixed precision training we cast the text_encoder and vae weights to half-precision
     # as these models are only used for inference, keeping weights in full precision is not required.
@@ -764,6 +806,7 @@ def main(args):
         text_encoder.to(accelerator.device, dtype=weight_dtype)
     vae.to(accelerator.device, dtype=weight_dtype)
 
+    # xformer 사용하는지 여부에 따라 unet에 enable_xformers_memory_efficient_attentin() 옵션을 주는 if문
     if args.enable_xformers_memory_efficient_attention:
         if is_xformers_available():
             import xformers
@@ -777,7 +820,7 @@ def main(args):
         else:
             raise ValueError("xformers is not available. Make sure it is installed correctly")
 
-    ## check this##
+    ## check this## -> 사용 안함.
     if args.gradient_checkpointing:
         unet.enable_gradient_checkpointing()
         if args.train_text_encoder or args.modifier_token is not None:
@@ -793,8 +836,10 @@ def main(args):
         )
         if args.with_prior_preservation:
             args.learning_rate = args.learning_rate*2.
+        # 위 if문의 영향에 의해 내가 입력한 learning_rate는 1e-5이지만, batch:2, prior preservation:2 이기 때문에 결과적으로는, 
+        # learning_rate = 4e-5가 되는 것 같다! 
 
-    # Use 8-bit Adam for lower memory usage or to fine-tune the model in 16GB GPUs
+    # Use 8-bit Adam for lower memory usage or to fine-tune the model in 16GB GPUs -> 안씀..
     if args.use_8bit_adam:
         print("-----using_8bit_adam")
         try:
@@ -809,6 +854,8 @@ def main(args):
         print("----not using 8bit adam")
         optimizer_class = torch.optim.AdamW
 
+    # 이제부터 중요코드 시작..!!
+        
     # Adding a modifier token which is optimized ####
     # Code taken from https://github.com/huggingface/diffusers/blob/main/examples/textual_inversion/textual_inversion.py
     modifier_token_id = []
@@ -816,11 +863,14 @@ def main(args):
     if args.modifier_token is not None:
         args.modifier_token = args.modifier_token.split('+')
         args.initializer_token = args.initializer_token.split('+')
+        # initializer_token = [ktn, pll, ucd]
         if len(args.modifier_token) > len(args.initializer_token):
             raise ValueError("You must specify + separated initializer token for each modifier token.")
         for modifier_token, initializer_token in zip(args.modifier_token, args.initializer_token[:len(args.modifier_token)]):
             # Add the placeholder token in tokenizer
             num_added_tokens = tokenizer.add_tokens(modifier_token)
+            # modifier token을 tokenizer의 classifier에 추가한다. 
+            # tokenizer.add_tokens는 입력된 토큰의 개수를 출력한다. 
             if num_added_tokens == 0:
                 raise ValueError(
                     f"The tokenizer already contains the token {modifier_token}. Please pass a different"
@@ -829,23 +879,36 @@ def main(args):
 
             # Convert the initializer_token, placeholder_token to ids
             token_ids = tokenizer.encode([initializer_token], add_special_tokens=False)
+            # tokenizer.encode: 말 그대로 단어를 숫자로 encoding하는 작업. 
+            # initializer token을 특정 숫자배열로 encode함. 
+
             print(token_ids)
+            # token ids가 코드 돌리는 중에 한 번도 출력된 적이 없는 것 같은데... ㅠㅠ
             # Check if initializer_token is a single token or a sequence of tokens
             if len(token_ids) > 1:
                 raise ValueError("The initializer token must be a single token.")
 
             initializer_token_id.append(token_ids[0])
             modifier_token_id.append(tokenizer.convert_tokens_to_ids(modifier_token))
+            # 현재 상황에서는 initializer_token_id, modifier_token_id에 각 1개씩 token_ids가 들어있을 것이다...
 
+# 여기까지 봤다. 
+            
         # Resize the token embeddings as we are adding new special tokens to the tokenizer
+        # tokenizer에 token이 추가된만큼, text_encoder에 class 개수를 추가함? 
+            # 그럼 tokenizer는 output 값으로 출력할 수 있는 단어의 개수를 출력하는 것인가? 
         text_encoder.resize_token_embeddings(len(tokenizer))
 
         # Initialise the newly added placeholder token with the embeddings of the initializer token
+        # 아래 코드로 인해 <new1> 의 encoding은 껍데기만 <new1>이지, 사실상 encoding값은 처음에 넣어준 생소한 단어의 encoding이다. 
+        # <new1>'s encoding = tsk's encoding ! 
         token_embeds = text_encoder.get_input_embeddings().weight.data
         for (x,y) in zip(modifier_token_id,initializer_token_id):
             token_embeds[x] = token_embeds[y]
+        
 
         # Freeze all parameters except for the token embeddings in text encoder
+        # token embedding을 제외하고는 전부 freeze.!
         params_to_freeze = itertools.chain(
             text_encoder.text_model.encoder.parameters(),
             text_encoder.text_model.final_layer_norm.parameters(),
