@@ -642,6 +642,7 @@ def main(args):
         with open(args.concepts_list, "r") as f:
             args.concepts_list = json.load(f)
 
+    #thum_anno 아래 if문은 regularization을 하느냐에 대한 코드
     if args.with_prior_preservation:
         for i, concept in enumerate(args.concepts_list):
             class_images_dir = Path(concept['class_data_dir'])

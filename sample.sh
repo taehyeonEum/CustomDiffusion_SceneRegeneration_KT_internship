@@ -1,7 +1,7 @@
 MODEL_NAME="CompVis/stable-diffusion-v1-4"
-OUTPUT_DIR="./logs/jjanggu_and_scene12"
+OUTPUT_DIR="./logs/jjanggu_and_scene_AL"
 CONCEPT_LIST="./assets/concept_list_jjanggu_scene2.json"
-DELTA_CKPT="logs/jjanggu_and_scene12/delta.bin"
+DELTA_CKPT="logs/jjanggu_and_scene11/delta.bin"
 FROM_FILE="prompts/jjanggu.txt"
 KEYWORD="base_setting"
 
@@ -21,7 +21,7 @@ KEYWORD="base_setting"
 #           --modifier_token "<new1>+<new2>" 
 
 ## sample 
-python src/diffusers_sample.py \
+python src/diffusers_sample_style_align.py \
     --delta_ckpt ${DELTA_CKPT} \
     --ckpt ${MODEL_NAME} \
     --prompt "A <new1> boy eats tangerines." \
