@@ -233,7 +233,7 @@ else:
 logger = get_logger(__name__)
 import sys
 
-
+#xformer를 사용하는지?? 
 def set_use_memory_efficient_attention_xformers(
     self, use_memory_efficient_attention_xformers: bool, attention_op: Optional[Callable] = None
 ):
@@ -299,18 +299,26 @@ class CustomDiffusionAttnProcessor:
 
         key = attn.to_k(encoder_hidden_states)
         value = attn.to_v(encoder_hidden_states)
+        
+        # 잘 이해가 되지 안음.!!
         if crossattn:
             detach = torch.ones_like(key)
             detach[:, :1, :] = detach[:, :1, :]*0.
+            # 첫 단어가 만 0 나머지는 다 1인 텐서기 detach.   
             key = detach*key + (1-detach)*key.detach()
             value = detach*value + (1-detach)*value.detach()
+            # 이렇게 프로세싱된 key, value는 첫 token은 gradient를 안태우도록 학습이 될 것 같음. initial token을 학습을 안하는 것인가? 
 
+        # attetion 진행할 때 여러개의 head로 나누는 코드. 
         query = attn.head_to_batch_dim(query)
         key = attn.head_to_batch_dim(key)
         value = attn.head_to_batch_dim(value)
-
+        
+        # 우리가 아는 attention process..
         attention_probs = attn.get_attention_scores(query, key, attention_mask)
+        # batch matrix-matrix product.
         hidden_states = torch.bmm(attention_probs, value)
+        # 아마 위에 attn.head_to_batch_dim의 반대과정, head로 나누었던 것을 다시 batch 사이즈로 바꾸는 과정인 것 같다. 
         hidden_states = attn.batch_to_head_dim(hidden_states)
 
         # linear proj
