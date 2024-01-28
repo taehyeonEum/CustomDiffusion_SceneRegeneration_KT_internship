@@ -287,6 +287,48 @@ def concatenate_and_resize_images(folder_path, output_path, output_name, target_
     concatenated_image.save(result_path)
     print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
 
+def concatenated_by_steps(folder_path, output_path, keywords):
+    image_path_folders = []
+    keywords = keywords.split('/')
+    def extract_last_number(file_path):
+        return int(file_path.split('/')[-1].split('.')[0])
+
+    # 마지막 숫자를 기준으로 정렬
+
+    for kw in keywords:
+        img_dir = os.path.join(folder_path, kw, "samples")
+        image_files = os.listdir(img_dir)
+        for i, imf in enumerate(image_files):
+            image_files[i] = os.path.join(img_dir, imf)
+    
+        image_files = sorted(image_files, key=extract_last_number)
+        
+        image_path_folders.append(image_files)
+
+    
+    image_folders = list(image_path_folders)
+    print("image_folders: -------------")
+    print(image_folders) #여기까지 내가 예상한데로 나옴...
+    for i in range(len(image_path_folders)):
+        for j in range(len(image_path_folders[0])):
+            image_folders[i][j] = Image.open(image_path_folders[i][j])
+    # pdb.set_trace()
+    image_number = -1
+    os.makedirs(os.path.join(output_path,"concatenated_by_steps"), exist_ok=True)
+    for j in range(len(image_path_folders[0])):
+        offset = 0
+        concatenated_image = Image.new('RGB', (len(keywords) * 512, 512))
+        for i in range(len(image_path_folders)):
+            concatenated_image.paste(image_folders[i][j], (offset, 0))
+            offset += 512
+        image_number = image_number + 1
+        # pdb.set_trace()
+
+        # 결과 이미지의 이름 지정하여 저장
+        result_path = os.path.join(output_path,"concatenated_by_steps",  str(image_number) + '.jpg')
+        concatenated_image.save(result_path)
+        print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
+
 class PromptDataset(Dataset):
     "A simple dataset to prepare the prompts to generate class images on multiple GPUs."
 

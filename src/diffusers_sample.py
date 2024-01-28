@@ -14,7 +14,7 @@ import pdb
 
 sys.path.append('./')
 from src.diffusers_model_pipeline import CustomDiffusionPipeline, CustomDiffusionXLPipeline
-
+  
 # def dummy(images, **kwargs):
 #     return images, []
 
