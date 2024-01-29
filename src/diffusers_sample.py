@@ -23,6 +23,7 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
     if sdxl:
         pipe = CustomDiffusionXLPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
     else:
+        # super class is StableDiffusionPipeline
         pipe = CustomDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
     pipe.load_model(delta_ckpt, compress) # load_model is for loading modified kv_attention model.!! 
     pipe.safety_checker = lambda images, **kwargs: (images, [False] * len(images))

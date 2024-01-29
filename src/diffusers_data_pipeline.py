@@ -272,6 +272,7 @@ def concatenate_and_resize_images(folder_path, output_path, output_name, target_
 
     # 모든 이미지의 크기가 동일한지 확인
     width, height = resized_images[0].size
+
     if not all(img.size == (width, height) for img in resized_images):
         raise ValueError("이미지 크기가 일치하지 않습니다.")
 
