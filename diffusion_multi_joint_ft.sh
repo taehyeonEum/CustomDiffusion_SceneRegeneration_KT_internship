@@ -700,3 +700,4 @@ python src/run_concatenated_by_steps.py \
     --file_path="logs/jjanggu_and_scene9" \
     --output_path="logs/jjanggu_and_scene9" \
     --keywords="scene9_500_prompt2/scene9_1000_prompt2/scene9_1500_prompt2/scene9_2000_prompt2" \
+
