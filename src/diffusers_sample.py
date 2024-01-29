@@ -54,6 +54,7 @@ def sample(ckpt, delta_ckpt, from_file, prompt, compress, batch_size, freeze_mod
 
         for prompt in data:
             images = pipe(prompt, num_inference_steps=200, guidance_scale=6., eta=1., generator=generator).images
+            # input(prompt)'s type is array!  
             all_images += images
             ## -----
             # pdb.set_trace()
