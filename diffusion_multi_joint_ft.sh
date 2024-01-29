@@ -780,7 +780,133 @@
 #     --keyword ${KEYWORD} \
 #     --output_dir ${OUTPUT_DIR} \
 
+# python src/run_concatenated_by_steps.py \
+#     --file_path="logs/jjanggu_and_scene17" \
+#     --output_path="logs/jjanggu_and_scene17" \
+#     --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000" \
+
+# ##### sample #####
+# MODEL_NAME="CompVis/stable-diffusion-v1-4"
+# OUTPUT_DIR="./logs/jjanggu_and_scene17"
+# DELTA_CKPT="logs/jjanggu_and_scene17/delta-2000.bin"
+# FROM_FILE="prompts/jjanggu2.txt"
+# KEYWORD="scene17_2000_2"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+#     --batch_size 2
+
+
+# ##### sample #####
+# MODEL_NAME="CompVis/stable-diffusion-v1-4"
+# OUTPUT_DIR="./logs/jjanggu_and_scene17"
+# DELTA_CKPT="logs/jjanggu_and_scene17/delta-2000.bin"
+# FROM_FILE="prompts/jjanggu2.txt"
+# KEYWORD="scene17_2000_10"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+#     --batch_size 10
+
+# ----------------------------------------- ex18
+
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+CONCEPT_LIST="./assets/concept_list_jjanggu_scene18.json"
+
+##### fine-tuning #####
+accelerate launch src/diffusers_training.py \
+          --pretrained_model_name_or_path $MODEL_NAME  \
+          --output_dir ${OUTPUT_DIR}  \
+          --concepts_list ${CONCEPT_LIST} \
+          --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
+          --resolution=512  \
+          --train_batch_size=2  \
+          --learning_rate=1e-5  \
+          --lr_warmup_steps=0 \
+          --max_train_steps=2500 \
+          --num_class_images=200 \
+          --scale_lr --hflip  \
+          --modifier_token "<new1>+<new2>+<new3>" 
+
+
+##### sample #####
+FROM_FILE="prompts/jjanggu18.txt"
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+DELTA_CKPT="logs/jjanggu_and_scene18/delta-500.bin"
+KEYWORD="scene18_500"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+##### sample #####
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+DELTA_CKPT="logs/jjanggu_and_scene18/delta-1000.bin"
+KEYWORD="scene18_1000"
+FROM_FILE="prompts/jjanggu18.txt"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+##### sample #####
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+DELTA_CKPT="logs/jjanggu_and_scene18/delta-1500.bin"
+KEYWORD="scene18_1500"
+FROM_FILE="prompts/jjanggu18.txt"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+##### sample #####
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+DELTA_CKPT="logs/jjanggu_and_scene18/delta-2000.bin"
+FROM_FILE="prompts/jjanggu18.txt"
+KEYWORD="scene18_2000"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+##### sample #####
+OUTPUT_DIR="./logs/jjanggu_and_scene18"
+DELTA_CKPT="logs/jjanggu_and_scene18/delta-2500.bin"
+FROM_FILE="prompts/jjanggu18.txt"
+KEYWORD="scene18_2500"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
 python src/run_concatenated_by_steps.py \
-    --file_path="logs/jjanggu_and_scene17" \
-    --output_path="logs/jjanggu_and_scene17" \
-    --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000" \
+    --file_path="logs/jjanggu_and_scene18" \
+    --output_path="logs/jjanggu_and_scene18" \
+    --keywords="scene18_500/scene18_1000/scene18_1500/scene18_2000/scene18_2500" \

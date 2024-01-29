@@ -1,0 +1,20 @@
+[
+    {
+        "instance_prompt":     "image of a <new1> boy",
+        "class_prompt":         "boy",
+        "instance_data_dir":    "./data/jjanggu2/im_f",
+        "class_data_dir":       "./real_reg/samples_japanese_cartoon_boy"
+    },
+    {
+        "instance_prompt":     "image of a <new2> style",
+        "class_prompt":         "style",
+        "instance_data_dir":    "./data/jjanggu_scene/im_f",
+        "class_data_dir":       "./real_reg/samples_cartoon"
+    },
+    {
+        "instance_prompt":     "image of a <new3> dog",
+        "class_prompt":         "dog",
+        "instance_data_dir":    "./data/h_dog/im",
+        "class_data_dir":       "./real_reg/samples_dog_character"
+    }
+]
