@@ -244,7 +244,7 @@ from diffusers.utils import check_min_version, is_wandb_available
 sys.path.append('./')
 from src.diffusers_model_pipeline import CustomDiffusionAttnProcessor, CustomDiffusionPipeline, set_use_memory_efficient_attention_xformers
 from src.diffusers_data_pipeline import CustomDiffusionDataset, PromptDataset, collate_fn
-from src import retrieve
+# from src import retrieve
 
 check_min_version("0.21.4")
 

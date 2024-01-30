@@ -288,7 +288,7 @@ def concatenate_and_resize_images(folder_path, output_path, output_name, target_
     concatenated_image.save(result_path)
     print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
 
-def concatenated_by_steps(folder_path, output_path, keywords):
+def concatenated_by_steps(folder_path, output_path, image_name,  keywords):
     image_path_folders = []
     keywords = keywords.split('/')
     def extract_last_number(file_path):
@@ -315,7 +315,7 @@ def concatenated_by_steps(folder_path, output_path, keywords):
             image_folders[i][j] = Image.open(image_path_folders[i][j])
     # pdb.set_trace()
     image_number = -1
-    os.makedirs(os.path.join(output_path,"concatenated_by_steps"), exist_ok=True)
+    os.makedirs(os.path.join(output_path,f"{image_name}"), exist_ok=True)
     for j in range(len(image_path_folders[0])):
         offset = 0
         concatenated_image = Image.new('RGB', (len(keywords) * 512, 512))
@@ -326,7 +326,7 @@ def concatenated_by_steps(folder_path, output_path, keywords):
         # pdb.set_trace()
 
         # 결과 이미지의 이름 지정하여 저장
-        result_path = os.path.join(output_path,"concatenated_by_steps",  str(image_number) + '.jpg')
+        result_path = os.path.join(output_path,f"{image_name}",  str(image_number) + '.jpg')
         concatenated_image.save(result_path)
         print(f"이미지가 성공적으로 저장되었습니다: {result_path}")
 

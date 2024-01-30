@@ -30,7 +30,6 @@
 #       direction or management of such entity, whether by contract or
 #       otherwise, or (ii) ownership of fifty percent (50%) or more of the
 #       outstanding shares, or (iii) beneficial ownership of such entity.
-
 #       "You" (or "Your") shall mean an individual or Legal Entity
 #       exercising permissions granted by this License.
 
@@ -239,6 +238,8 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import AutoTokenizer, PretrainedConfig
+import json
+import pdb
 
 import diffusers
 from diffusers import (
@@ -256,7 +257,7 @@ from diffusers.utils.import_utils import is_xformers_available
 sys.path.append('./')
 from src.diffusers_model_pipeline import CustomDiffusionAttnProcessor, CustomDiffusionXLPipeline, set_use_memory_efficient_attention_xformers
 from src.diffusers_data_pipeline import CustomDiffusionDataset, PromptDataset, collate_fn
-from src import retrieve
+# from src import retrieve
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
 check_min_version("0.21.4")
@@ -327,6 +328,7 @@ def encode_prompt(text_encoders, tokenizers, prompt, text_input_ids_list=None):
 
 
 def tokenize_prompt(tokenizer, prompt):
+    pdb.set_trace()
     text_inputs = tokenizer(
         prompt,
         padding="max_length",
@@ -425,7 +427,7 @@ def parse_args(input_args=None):
         "--instance_data_dir",
         type=str,
         default=None,
-        required=True,
+        required=False,
         help="A folder containing the training data of instance images.",
     )
     parser.add_argument(
@@ -439,7 +441,7 @@ def parse_args(input_args=None):
         "--instance_prompt",
         type=str,
         default=None,
-        required=True,
+        required=False,
         help="The prompt with identifier specifying the instance",
     )
     parser.add_argument(
@@ -735,8 +737,10 @@ def parse_args(input_args=None):
 
     return args
 
-
+# thum_anno: main start...
 def main(args):
+    #thum_code
+    os.makedirs(args.output_dir, exist_ok=True)
     logging_dir = Path(args.output_dir, args.logging_dir)
 
     accelerator_project_config = ProjectConfiguration(project_dir=args.output_dir, logging_dir=logging_dir)
@@ -783,6 +787,7 @@ def main(args):
     else:
         with open(args.concepts_list, "r") as f:
             args.concepts_list = json.load(f)
+    # thum_anno: get concept list
 
     # Generate class images if prior preservation is enabled.
     if args.with_prior_preservation:
@@ -791,9 +796,9 @@ def main(args):
             if not class_images_dir.exists():
                 class_images_dir.mkdir(parents=True, exist_ok=True)
             if args.real_prior:
-                if accelerator.is_main_process:
-                    if not Path(os.path.join(class_images_dir, 'images')).exists() or len(list(Path(os.path.join(class_images_dir, 'images')).iterdir())) < args.num_class_images:
-                        retrieve.retrieve(concept['class_prompt'], class_images_dir, args.num_class_images)
+                # if accelerator.is_main_process:
+                #     if not Path(os.path.join(class_images_dir, 'images')).exists() or len(list(Path(os.path.join(class_images_dir, 'images')).iterdir())) < args.num_class_images:
+                #         retrieve.retrieve(concept['class_prompt'], class_images_dir, args.num_class_images)
                 concept['class_prompt'] = os.path.join(class_images_dir, 'caption.txt')
                 concept['class_data_dir'] = os.path.join(class_images_dir, 'images.txt')
                 args.concepts_list[i] = concept
@@ -1115,6 +1120,7 @@ def main(args):
             prompt_embeds = torch.cat([prompt_embeds, class_prompt_hidden_states], dim=0)
             unet_add_text_embeds = torch.cat([unet_add_text_embeds, class_pooled_prompt_embeds], dim=0)
     else:
+        pdb.set_trace()
         tokens_one = tokenize_prompt(tokenizer_one, args.instance_prompt)
         tokens_two = tokenize_prompt(tokenizer_two, args.instance_prompt)
         if args.with_prior_preservation:
