@@ -1205,12 +1205,168 @@
 
 # # ----------------------------------------- ex17_ with G earth
 
-MODEL_NAME="CompVis/stable-diffusion-v1-4"
-OUTPUT_DIR="./logs/jjanggu_and_scene17_batch_6"
-CONCEPT_LIST="./assets/concept_list_jjanggu_scene17.json"
-FROM_FILE="prompts/jjanggu2.txt"
+# MODEL_NAME="CompVis/stable-diffusion-v1-4"
+# OUTPUT_DIR="./logs/jjanggu_and_scene17_batch_6"
+# CONCEPT_LIST="./assets/concept_list_jjanggu_scene17.json"
+# FROM_FILE="prompts/jjanggu2.txt"
 
-##### fine-tuning #####
+# ##### fine-tuning #####
+# # accelerate launch src/diffusers_training.py \
+# #           --pretrained_model_name_or_path $MODEL_NAME  \
+# #           --output_dir ${OUTPUT_DIR}  \
+# #           --concepts_list ${CONCEPT_LIST} \
+# #           --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
+# #           --resolution=512  \
+# #           --train_batch_size=6  \
+# #           --learning_rate=1e-5  \
+# #           --lr_warmup_steps=0 \
+# #           --max_train_steps=2000 \
+# #           --num_class_images=200 \
+# #           --scale_lr --hflip  \
+# #           --modifier_token "<new1>+<new2>" \
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-500.bin"
+# KEYWORD="scene17_500"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-1000.bin"
+# KEYWORD="scene17_1000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-1500.bin"
+# KEYWORD="scene17_1500"
+
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-2000.bin"
+# KEYWORD="scene17_2000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+# python src/run_concatenated_by_steps.py \
+#     --file_path ${OUTPUT_DIR} \
+#     --output_path ${OUTPUT_DIR} \
+#     --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000" \
+#     --image_name="concatenated_by_step" \
+
+# ------------------------------------- jjanggu_and_scene_19 train only style! 
+
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+INSTANCE_DIR="./data/jjanggu_scene/im_f"
+REFERENCE_DIR="./real_reg/samples_cartoon"
+OUTPUT_DIR="./logs/jjanggu_and_scene19"
+FROM_FILE="prompts/jjanggu19.txt"
+
+# accelerate launch src/diffusers_training.py \
+#           --pretrained_model_name_or_path=$MODEL_NAME  \
+#           --instance_data_dir ${INSTANCE_DIR}  \
+#           --class_data_dir ${REFERENCE_DIR} \
+#           --output_dir ${OUTPUT_DIR}  \
+#           --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
+#           --instance_prompt="image of a <new2> style"  \
+#           --class_prompt="style" \
+#           --resolution=512  \
+#           --train_batch_size=6  \
+#           --learning_rate=1e-5  \
+#           --lr_warmup_steps=0 \
+#           --max_train_steps=2000 \
+#           --num_class_images=200 \
+#           --scale_lr --hflip  \
+#           --modifier_token "<new2>" \
+#           --initializer_token "pll" \
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene19/delta-500.bin"
+# KEYWORD="scene17_500"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene19/delta-1000.bin"
+# KEYWORD="scene17_1000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene19/delta-1500.bin"
+# KEYWORD="scene17_1500"
+
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+
+# #### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene19/delta-2000.bin"
+# KEYWORD="scene17_2000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+python src/run_concatenated_by_steps.py \
+    --file_path ${OUTPUT_DIR} \
+    --output_path ${OUTPUT_DIR} \
+    --keywords="scene19_500/scene19_1000/scene19_1500/scene19_2000" \
+    --image_name="concatenated_by_step" \
+
+# ------------------------------------- jjanggu_and_scene18_G_earth train 3 object!
+
+# MODEL_NAME="CompVis/stable-diffusion-v1-4"
+# OUTPUT_DIR="./logs/jjanggu_and_scene18_G_earth"
+# CONCEPT_LIST="./assets/concept_list_jjanggu_scene18.json"
+# FROM_FILE="prompts/jjanggu18.txt"
+
+# ##### fine-tuning #####
 # accelerate launch src/diffusers_training.py \
 #           --pretrained_model_name_or_path $MODEL_NAME  \
 #           --output_dir ${OUTPUT_DIR}  \
@@ -1220,61 +1376,71 @@ FROM_FILE="prompts/jjanggu2.txt"
 #           --train_batch_size=6  \
 #           --learning_rate=1e-5  \
 #           --lr_warmup_steps=0 \
-#           --max_train_steps=2000 \
+#           --max_train_steps=2500 \
 #           --num_class_images=200 \
 #           --scale_lr --hflip  \
-#           --modifier_token "<new1>+<new2>" \
-
-#### sample #####
-DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-500.bin"
-KEYWORD="scene17_500"
-
-python src/diffusers_sample.py \
-    --delta_ckpt ${DELTA_CKPT} \
-    --ckpt ${MODEL_NAME} \
-    --from-file ${FROM_FILE} \
-    --keyword ${KEYWORD} \
-    --output_dir ${OUTPUT_DIR} \
+#           --modifier_token "<new1>+<new2>+<new3>" 
 
 
-#### sample #####
-DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-1000.bin"
-KEYWORD="scene17_1000"
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene18_G_earth/delta-500.bin"
+# KEYWORD="scene18_500"
 
-python src/diffusers_sample.py \
-    --delta_ckpt ${DELTA_CKPT} \
-    --ckpt ${MODEL_NAME} \
-    --from-file ${FROM_FILE} \
-    --keyword ${KEYWORD} \
-    --output_dir ${OUTPUT_DIR} \
-
-
-##### sample #####
-DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-1500.bin"
-KEYWORD="scene17_1500"
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
 
 
-python src/diffusers_sample.py \
-    --delta_ckpt ${DELTA_CKPT} \
-    --ckpt ${MODEL_NAME} \
-    --from-file ${FROM_FILE} \
-    --keyword ${KEYWORD} \
-    --output_dir ${OUTPUT_DIR} \
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene18_G_earth/delta-1000.bin"
+# KEYWORD="scene18_1000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
 
 
-#### sample #####
-DELTA_CKPT="logs/jjanggu_and_scene17_batch_6/delta-2000.bin"
-KEYWORD="scene17_2000"
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene18_G_earth/delta-1500.bin"
+# KEYWORD="scene18_1500"
 
-python src/diffusers_sample.py \
-    --delta_ckpt ${DELTA_CKPT} \
-    --ckpt ${MODEL_NAME} \
-    --from-file ${FROM_FILE} \
-    --keyword ${KEYWORD} \
-    --output_dir ${OUTPUT_DIR} \
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
 
-python src/run_concatenated_by_steps.py \
-    --file_path ${OUTPUT_DIR} \
-    --output_path ${OUTPUT_DIR} \
-    --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000" \
-    --image_name="concatenated_by_step" \
+
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene18_G_earth/delta-2000.bin"
+# KEYWORD="scene18_2000"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+# ##### sample #####
+# DELTA_CKPT="logs/jjanggu_and_scene18_G_earth/delta-2500.bin"
+# KEYWORD="scene18_2500"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+# python src/run_concatenated_by_steps.py \
+#     --file_path="logs/jjanggu_and_scene18_G_earth" \
+#     --output_path="logs/jjanggu_and_scene18_G_earth" \
+#     --keywords="scene18_500/scene18_1000/scene18_1500/scene18_2000/scene18_2500" \
