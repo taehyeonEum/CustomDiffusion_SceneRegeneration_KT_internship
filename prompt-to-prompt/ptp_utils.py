@@ -328,7 +328,7 @@ def get_word_inds(text: str, word_place: int, tokenizer):
                 cur_len = 0
     return np.array(out)
 
-
+# 특정 단어에 대한 mask를 만드는 함수인 것 같다! 
 def update_alpha_time_word(alpha, bounds: Union[float, Tuple[float, float]], prompt_ind: int,
                            word_inds: Optional[torch.Tensor]=None):
     if type(bounds) is float:
@@ -341,7 +341,7 @@ def update_alpha_time_word(alpha, bounds: Union[float, Tuple[float, float]], pro
     alpha[end:, prompt_ind, word_inds] = 0
     return alpha
 
-
+# 결국 이 함수는 word embedding에 대한 alpha mask를 구성하는 함수이다. 
 def get_time_words_attention_alpha(prompts, num_steps,
                                    cross_replace_steps: Union[float, Dict[str, Tuple[float, float]]],
                                    tokenizer, max_num_words=77):
@@ -351,8 +351,10 @@ def get_time_words_attention_alpha(prompts, num_steps,
         cross_replace_steps["default_"] = (0., 1.)
     alpha_time_words = torch.zeros(num_steps + 1, len(prompts) - 1, max_num_words)
     for i in range(len(prompts) - 1):
+        # word에 대한 마스크를 구성. 
         alpha_time_words = update_alpha_time_word(alpha_time_words, cross_replace_steps["default_"],
                                                   i)
+    
     for key, item in cross_replace_steps.items():
         if key != "default_":
              inds = [get_word_inds(prompts[i], key, tokenizer) for i in range(1, len(prompts))]

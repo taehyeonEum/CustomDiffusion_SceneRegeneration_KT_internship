@@ -25,7 +25,7 @@ class ScoreParams:
     def mis_match_char(self, x, y):
         if x != y:
             return self.mismatch
-        else:
+        else: 
             return self.match
         
     
@@ -136,7 +136,9 @@ def get_word_inds(text: str, word_place: int, tokenizer):
         word_place = [word_place]
     out = []
     if len(word_place) > 0:
+        
         words_encode = [tokenizer.decode([item]).strip("#") for item in tokenizer.encode(text)][1:-1]
+        print(words_encode)
         cur_len, ptr = 0, 0
 
         for i in range(len(words_encode)):
@@ -146,6 +148,7 @@ def get_word_inds(text: str, word_place: int, tokenizer):
             if cur_len >= len(split_text[ptr]):
                 ptr += 1
                 cur_len = 0
+        print("out", out)
     return np.array(out)
 
 
@@ -156,12 +159,19 @@ def get_replacement_mapper_(x: str, y: str, tokenizer, max_len=77):
         raise ValueError(f"attention replacement edit can only be applied on prompts with the same length"
                          f" but prompt A has {len(words_x)} words and prompt B has {len(words_y)} words.")
     inds_replace = [i for i in range(len(words_y)) if words_y[i] != words_x[i]]
+    # thum_code 일단 위 코드를 수정해야할 것 같음!!!!! 
     inds_source = [get_word_inds(x, i, tokenizer) for i in inds_replace]
+    print("inds_source", inds_source)
     inds_target = [get_word_inds(y, i, tokenizer) for i in inds_replace]
-    mapper = np.zeros((max_len, max_len))
+    print("inds_target", inds_target)
+    mapper = np.zeros((max_len, max_len)) # 77 x 77
     i = j = 0
     cur_inds = 0
     while i < max_len and j < max_len:
+        print("i", i)
+        print("j", j)
+        print("cur_inds", cur_inds)
+        # 대부분이 첫번째 if문에 걸리지 않는다. 
         if cur_inds < len(inds_source) and inds_source[cur_inds][0] == i:
             inds_source_, inds_target_ = inds_source[cur_inds], inds_target[cur_inds]
             if len(inds_source_) == len(inds_target_):
@@ -181,9 +191,40 @@ def get_replacement_mapper_(x: str, y: str, tokenizer, max_len=77):
             mapper[j, j] = 1
             i += 1
             j += 1
+        print("mapper", mapper)
 
     return torch.from_numpy(mapper).float()
+    # 이해했다~~~~~~!!!
+    # 이 mapper라는 함수는 다른 것이 아니라 2차원 array 77 x 77 을 만들고 바꿔야하는 그 지점. 
+    # 예를 들어 source 의 바꾸고 싶은 단어 인덱스가 3 이고, target의 바꾸고 싶은 단어 index가 5 라면 [3, 5]가 달라져야 하는 것. 
+    # 그리고 대각선 벡터는 다 1로 처리하는데 왜그런지는 잘 모르겠음....!!!! 
 
+'''
+<source>
+['a', 'painting', 'of', 'a', 'squirrel', 'eating', 'a', 'burger']
+out [5]
+inds_source [array([5])]
+
+<target>
+['a', 'painting', 'of', 'a', 'lion', 'eating', 'a', 'burger']
+out [5]
+inds_target [array([5])]
+'''
+
+
+'''
+위와 같은 세팅일 때 아래와 같은 결과가 나온다. 
+mapper 
+[[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 1 
+'''
 
 
 def get_replacement_mapper(prompts, tokenizer, max_len=77):
@@ -192,5 +233,6 @@ def get_replacement_mapper(prompts, tokenizer, max_len=77):
     for i in range(1, len(prompts)):
         mapper = get_replacement_mapper_(x_seq, prompts[i], tokenizer, max_len)
         mappers.append(mapper)
+    print("final_mapper", mapper)
     return torch.stack(mappers)
 
