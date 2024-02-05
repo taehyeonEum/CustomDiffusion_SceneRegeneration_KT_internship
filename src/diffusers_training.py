@@ -970,6 +970,7 @@ def main(args):
     progress_bar.set_description("Steps")
     global_step = 0
 
+
     # 실제 학습 부분!
     # 내일 한 번 더 보기! 
     for epoch in range(args.num_train_epochs):

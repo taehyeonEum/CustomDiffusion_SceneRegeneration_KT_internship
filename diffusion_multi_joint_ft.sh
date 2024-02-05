@@ -1281,11 +1281,11 @@
 
 # ------------------------------------- jjanggu_and_scene_19 train only style! 
 
-MODEL_NAME="CompVis/stable-diffusion-v1-4"
-INSTANCE_DIR="./data/jjanggu_scene/im_f"
-REFERENCE_DIR="./real_reg/samples_cartoon"
-OUTPUT_DIR="./logs/jjanggu_and_scene19"
-FROM_FILE="prompts/jjanggu19.txt"
+# MODEL_NAME="CompVis/stable-diffusion-v1-4"
+# INSTANCE_DIR="./data/jjanggu_scene/im_f"
+# REFERENCE_DIR="./real_reg/samples_cartoon"
+# OUTPUT_DIR="./logs/jjanggu_and_scene19"
+# FROM_FILE="prompts/jjanggu19.txt"
 
 # accelerate launch src/diffusers_training.py \
 #           --pretrained_model_name_or_path=$MODEL_NAME  \
@@ -1353,11 +1353,11 @@ FROM_FILE="prompts/jjanggu19.txt"
 #     --keyword ${KEYWORD} \
 #     --output_dir ${OUTPUT_DIR} \
 
-python src/run_concatenated_by_steps.py \
-    --file_path ${OUTPUT_DIR} \
-    --output_path ${OUTPUT_DIR} \
-    --keywords="scene19_500/scene19_1000/scene19_1500/scene19_2000" \
-    --image_name="concatenated_by_step" \
+# python src/run_concatenated_by_steps.py \
+#     --file_path ${OUTPUT_DIR} \
+#     --output_path ${OUTPUT_DIR} \
+#     --keywords="scene19_500/scene19_1000/scene19_1500/scene19_2000" \
+#     --image_name="concatenated_by_step" \
 
 # ------------------------------------- jjanggu_and_scene18_G_earth train 3 object!
 
@@ -1444,3 +1444,48 @@ python src/run_concatenated_by_steps.py \
 #     --file_path="logs/jjanggu_and_scene18_G_earth" \
 #     --output_path="logs/jjanggu_and_scene18_G_earth" \
 #     --keywords="scene18_500/scene18_1000/scene18_1500/scene18_2000/scene18_2500" \
+
+# ---------- to get no finetuned model
+
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+OUTPUT_DIR="./logs/SD_no_finetuned"
+CONCEPT_LIST="./assets/concept_list_jjanggu_scene18.json"
+
+##### fine-tuning #####
+# accelerate launch src/diffusers_training.py \
+#           --pretrained_model_name_or_path $MODEL_NAME  \
+#           --output_dir ${OUTPUT_DIR}  \
+#           --concepts_list ${CONCEPT_LIST} \
+#           --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
+#           --resolution=512  \
+#           --train_batch_size=6  \
+#           --learning_rate=1e-100  \
+#           --lr_warmup_steps=0 \
+#           --max_train_steps=2500 \
+#           --num_class_images=200 \
+#           --scale_lr --hflip  \
+#           --modifier_token "<new1>+<new2>+<new3>" \
+#           --save_steps 1 \
+
+# #### sample #####
+# DELTA_CKPT="logs/SD_no_finetuned/delta-1.bin"
+# KEYWORD="scene17_1"
+# FROM_FILE="prompts/jjanggu2.txt"
+
+# python src/diffusers_sample.py \
+#     --delta_ckpt ${DELTA_CKPT} \
+#     --ckpt ${MODEL_NAME} \
+#     --from-file ${FROM_FILE} \
+#     --keyword ${KEYWORD} \
+#     --output_dir ${OUTPUT_DIR} \
+
+DELTA_CKPT="logs/SD_no_finetuned/delta-1.bin"
+KEYWORD="scene17_1_plain"
+FROM_FILE="prompts/jjanggu2_plain.txt"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
