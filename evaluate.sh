@@ -1,45 +1,94 @@
 # example.
 # python evaluate.py --sample_root {folder} --target_path {target-folder} --numgen {numgen}
 
-echo "----------------------------------------------------------------------"
-echo "-------------------------scene17_500----------------------------------"
-echo "----------------------------------------------------------------------"
-FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_500"
-TARGET_FOLDER="./data/jjanggu2/im_f"
-NUMGEN="50"
-OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_500.pkl"
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------scene17_500----------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_500"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="50"
+# OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_500.pkl"
 
-python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+
+
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------scene17_1000---------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_1000"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="50"
+# OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_1000.pkl"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+
+
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------scene17_1500---------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_1500"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="50"
+# OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_1500.pkl"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+
+
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------scene17_2000---------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_2000"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="50"
+# OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation.pkl"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------scene17_500----------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./logs/jjanggu_and_scene17_b6_LR5e-6/scene17_500"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="50"
+# OUTPKL="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_500.pkl"
+# OUTCSV="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_500.csv"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
 
 
 echo "----------------------------------------------------------------------"
 echo "-------------------------scene17_1000---------------------------------"
 echo "----------------------------------------------------------------------"
-FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_1000"
+FOLDER="./logs/jjanggu_and_scene17_b6_LR5e-6/scene17_1000"
 TARGET_FOLDER="./data/jjanggu2/im_f"
 NUMGEN="50"
-OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_1000.pkl"
+OUTPKL="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_1000.pkl"
+OUTCSV="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_1000.csv"
 
-python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+
+python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV} 
 
 
 echo "----------------------------------------------------------------------"
 echo "-------------------------scene17_1500---------------------------------"
 echo "----------------------------------------------------------------------"
-FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_1500"
+FOLDER="./logs/jjanggu_and_scene17_b6_LR5e-6/scene17_1500"
 TARGET_FOLDER="./data/jjanggu2/im_f"
 NUMGEN="50"
-OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation_1500.pkl"
+OUTPKL="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_1500.pkl"
+OUTCSV="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_1500.csv"
 
-python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
 
 
 echo "----------------------------------------------------------------------"
 echo "-------------------------scene17_2000---------------------------------"
 echo "----------------------------------------------------------------------"
-FOLDER="./logs/jjanggu_and_scene17_batch_6/scene17_2000"
+FOLDER="./logs/jjanggu_and_scene17_b6_LR5e-6/scene17_2000"
 TARGET_FOLDER="./data/jjanggu2/im_f"
 NUMGEN="50"
-OUTPKL="./eval/jjanggu_and_scene17_batch_6/evaluation.pkl"
+OUTPKL="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation.pkl"
+OUTCSV="./eval/jjanggu_and_scene17_b6_LR5e-6/evaluation_2000.csv"
 
-python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL}
+python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
+

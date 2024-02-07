@@ -1,0 +1,14 @@
+[
+    {
+        "instance_prompt":     "image of a <new1> boy",
+        "class_prompt":         "boy",
+        "instance_data_dir":    "./data/jjanggu2/im_f2",
+        "class_data_dir":       "./real_reg/samples_japanese_cartoon_boy"
+    },
+    {
+        "instance_prompt":     "image of a <new2> style",
+        "class_prompt":         "style",
+        "instance_data_dir":    "./data/jjanggu_scene/im_f2",
+        "class_data_dir":       "./real_reg/samples_cartoon"
+    }
+]

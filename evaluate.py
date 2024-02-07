@@ -231,7 +231,7 @@ def dinoeval_image(image_dir, image_dir_ref, device):
     return np.mean(res)
 
 
-def calmetrics(sample_root, target_paths, numgen, outpkl, outcvs):
+def calmetrics(sample_root, target_paths, numgen, outpkl, outcsv):
     device = 'cuda'
 
     outpath = os.path.dirname(outpkl)
@@ -286,7 +286,7 @@ def calmetrics(sample_root, target_paths, numgen, outpkl, outcvs):
             df.loc[df.index == expname, sd.keys()] = sd.values()
 
     df.to_pickle(outpkl)
-    df.to_cvs(outcvs)
+    df.to_csv(outcsv)
 
     '''
     import pickle as pkl
@@ -309,12 +309,15 @@ def parse_args():
                         help="+ separated paths to real target images")
     parser.add_argument("--outpkl", type=str, default="evaluation.pkl",
                         help="the path to save result pkl file")
+    parser.add_argument("--outcsv", type=str, default="evaluation.csv",
+                        help="the path to save result csv file")
+    
     return parser.parse_args()
 
 
 def main(args):
     calmetrics(Path(args.sample_root), args.target_paths,
-               args.numgen, args.outpkl)
+               args.numgen, args.outpkl, args.outcsv)
 
 
 if __name__ == "__main__":
