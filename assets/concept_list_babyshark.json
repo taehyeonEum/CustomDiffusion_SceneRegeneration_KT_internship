@@ -1,0 +1,14 @@
+[
+    {
+        "instance_prompt":     "image of a <new1> fish",
+        "class_prompt":         "fish",
+        "instance_data_dir":    "./data/babyshark/im",
+        "class_data_dir":       "./real_reg/samples_sea_character"
+    },
+    {
+        "instance_prompt":     "image of a <new2> style",
+        "class_prompt":         "style",
+        "instance_data_dir":    "./data/babyshark_scene/im",
+        "class_data_dir":       "./real_reg/samples_animal_cartoon"
+    }
+]

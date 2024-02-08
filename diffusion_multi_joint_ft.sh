@@ -2018,5 +2018,95 @@ python src/run_concatenated_by_steps.py \
     --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000/scene17_2500" \
     --image_name="concatenated_by_step" \
 
+# ----------------------------------------- baby shark with low learning rate 8e-6  
+
+MODEL_NAME="CompVis/stable-diffusion-v1-4"
+OUTPUT_DIR="./logs/babyshark"
+CONCEPT_LIST="./assets/concept_list_babyshark.json"
+FROM_FILE="prompts/babyshark.txt"
+LEARNING_RATE=8e-6
+
+#### fine-tuning #####
+accelerate launch src/diffusers_training.py \
+          --pretrained_model_name_or_path ${MODEL_NAME}  \
+          --output_dir ${OUTPUT_DIR}  \
+          --concepts_list ${CONCEPT_LIST} \
+          --with_prior_preservation --real_prior --prior_loss_weight=1.0 \
+          --resolution=512  \
+          --train_batch_size=6  \
+          --learning_rate ${LEARNING_RATE}  \
+          --lr_warmup_steps=0 \
+          --max_train_steps=2500 \
+          --num_class_images=200 \
+          --scale_lr --hflip  \
+          --modifier_token "<new1>+<new2>" \
+
+#### sample #####
+DELTA_CKPT="logs/babyshark/delta-500.bin"
+KEYWORD="scene17_500"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+#### sample #####
+DELTA_CKPT="logs/babyshark/delta-1000.bin"
+KEYWORD="scene17_1000"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+##### sample #####
+DELTA_CKPT="logs/babyshark/delta-1500.bin"
+KEYWORD="scene17_1500"
+
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+
+#### sample #####
+DELTA_CKPT="logs/babyshark/delta-2000.bin"
+KEYWORD="scene17_2000"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+#### sample ##### 
+DELTA_CKPT="logs/babyshark/delta-2500.bin"
+KEYWORD="scene17_2500"
+
+python src/diffusers_sample.py \
+    --delta_ckpt ${DELTA_CKPT} \
+    --ckpt ${MODEL_NAME} \
+    --from-file ${FROM_FILE} \
+    --keyword ${KEYWORD} \
+    --output_dir ${OUTPUT_DIR} \
+
+python src/run_concatenated_by_steps.py \
+    --file_path ${OUTPUT_DIR} \
+    --output_path ${OUTPUT_DIR} \
+    --keywords="scene17_500/scene17_1000/scene17_1500/scene17_2000/scene17_2500" \
+    --image_name="concatenated_by_step" \
+
+
+
 
 
