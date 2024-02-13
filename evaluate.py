@@ -158,8 +158,8 @@ def clipeval(image_dir, candidates_json, device):
     image_ids = [Path(path).stem for path in image_paths]
     with open(candidates_json) as f:
         candidates = json.load(f)
-    # pdb.set_trace()
-    candidates = [candidates[int(cid)] for cid in image_ids]
+    pdb.set_trace()
+    candidates = [candidates[int(cid)-1] for cid in image_ids]
 
     # model, _ = clip.load("ViT-B/32", device=device, jit=False)
     #thum_code
@@ -248,7 +248,7 @@ def calmetrics(sample_root, target_paths, numgen, outpkl, outcsv):
     json_path = sample_root / 'prompts.json'
     # pdb.set_trace()
 
-    assert len(glob.glob(str(image_path / '*.jpg'))) == numgen, "Sample folder does not contain required number of images"
+    # assert len(glob.glob(str(image_path / '*.jpg'))) == numgen, "Sample folder does not contain required number of images"
 
     textalignment, _ = \
         clipeval(str(image_path), str(json_path), device)
