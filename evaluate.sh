@@ -103,25 +103,58 @@
 
 # python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
 
+# echo "----------------------------------------------------------------------"
+# echo "-------------------------dreambooth_1000------------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./baseline_result/dreambooth_result"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="45"
+# OUTPKL="./eval/dreambooth/evaluation.pkl"
+# OUTCSV="./eval/dreambooth/evaluation.csv"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
+
+# echo "----------------------------------------------------------------------"
+# echo "---------------------lora_dreambooth_1250-----------------------------"
+# echo "----------------------------------------------------------------------"
+# FOLDER="./baseline_result/lora_result"
+# TARGET_FOLDER="./data/jjanggu2/im_f"
+# NUMGEN="45"
+# OUTPKL="./eval/lora/evaluation.pkl"
+# OUTCSV="./eval/lora/evaluation.csv"
+
+# python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
+
 echo "----------------------------------------------------------------------"
-echo "-------------------------dreambooth_1000------------------------------"
+echo "------------------------------orig_500--------------------------------"
 echo "----------------------------------------------------------------------"
-FOLDER="./baseline_result/dreambooth_result"
+FOLDER="./_latent_add_out/e17_b6_LR5e-6/orig500"
 TARGET_FOLDER="./data/jjanggu2/im_f"
 NUMGEN="45"
-OUTPKL="./eval/dreambooth/evaluation.pkl"
-OUTCSV="./eval/dreambooth/evaluation.csv"
+OUTPKL="./eval/_latent_add_out/evaluation_500.pkl"
+OUTCSV="./eval/_latent_add_out/evaluation_500.csv"
 
 python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
 
 echo "----------------------------------------------------------------------"
-echo "---------------------lora_dreambooth_1250-----------------------------"
+echo "------------------------------orig_2000--------------------------------"
 echo "----------------------------------------------------------------------"
-FOLDER="./baseline_result/lora_result"
+FOLDER="./_latent_add_out/e17_b6_LR5e-6/orig2000"
 TARGET_FOLDER="./data/jjanggu2/im_f"
 NUMGEN="45"
-OUTPKL="./eval/lora/evaluation.pkl"
-OUTCSV="./eval/lora/evaluation.csv"
+OUTPKL="./eval/_latent_add_out/evaluation_2000.pkl"
+OUTCSV="./eval/_latent_add_out/evaluation_2000.csv"
+
+python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
+
+echo "----------------------------------------------------------------------"
+echo "--------------------------fully_tune_2000-----------------------------"
+echo "----------------------------------------------------------------------"
+FOLDER="./_latent_add_out/e17_b6_LR5e-6/latadd2000"
+TARGET_FOLDER="./data/jjanggu2/im_f"
+NUMGEN="45"
+OUTPKL="./eval/_latent_add_out/evaluation_2000latent.pkl"
+OUTCSV="./eval/_latent_add_out/evaluation_2000latent.csv"
 
 python evaluate.py --sample_root ${FOLDER} --target_path ${TARGET_FOLDER} --numgen ${NUMGEN} --outpkl ${OUTPKL} --outcsv ${OUTCSV}
 
