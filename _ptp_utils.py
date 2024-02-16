@@ -159,12 +159,16 @@ def text2image_ldm_stable(
         [""] * batch_size, padding="max_length", max_length=max_length, return_tensors="pt"
     )
     uncond_embeddings = model.text_encoder(uncond_input.input_ids.to(model.device))[0]
-    
     context = [uncond_embeddings, text_embeddings]
     if not low_resource:
-        context = torch.cat(context)
+        context = torch.cat(context) #.to(dtype=torch.float16)
+    # print("type(context): ", end=" ")
+    # print(type(context))
     latent, latents = init_latent(latent, model, height, width, generator, batch_size)
-    
+    latent = latent #.to(torch.float16)
+    latents = latents # .to(torch.float16)
+    # print("type(latents): ", end=" ")
+    # print(type(latents))
     # set timesteps
     # original
     # extra_set_kwargs = {"offset": 1}
